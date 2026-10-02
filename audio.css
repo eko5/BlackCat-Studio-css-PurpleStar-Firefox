@@ -1,0 +1,155 @@
+
+/* =========================================================
+   AUDIO.CSS v2 — Neon RGB Equalizer (Firefox 155, userChrome)
+   W userChrome.css, NA SAMEJ GÓRZE (przed innymi regułami):
+       @import url("audio.css");
+   about:config -> toolkit.legacyUserProfileCustomizations.stylesheets = true
+   ========================================================= */
+
+:root {
+  --aud-purple: #b44cff;
+  --aud-pink:   #ff2fb3;
+  --aud-cyan:   #25e8ff;
+  --aud-green:  #3dffa0;
+  --aud-w: 18px;
+  --aud-h: 16px;
+}
+
+/* =========================================================
+   WARSTWA 1 — pasek equalizera na dole karty (działa zawsze;
+   opiera się tylko na atrybucie [soundplaying] karty)
+   ========================================================= */
+
+.tabbrowser-tab[soundplaying]:not([muted]) .tab-content {
+  background-repeat: no-repeat !important;
+  background-position:
+    2% 100%, 17% 100%, 32% 100%, 47% 100%, 62% 100%, 77% 100%, 92% 100% !important;
+  background-size:
+    4px 3px, 4px 5px, 4px 7px, 4px 4px, 4px 6px, 4px 3px, 4px 5px !important;
+  background-image:
+    linear-gradient(to top, var(--aud-pink),   var(--aud-purple)),
+    linear-gradient(to top, var(--aud-purple), var(--aud-cyan)),
+    linear-gradient(to top, var(--aud-pink),   var(--aud-green)),
+    linear-gradient(to top, var(--aud-purple), var(--aud-cyan)),
+    linear-gradient(to top, var(--aud-pink),   var(--aud-purple)),
+    linear-gradient(to top, var(--aud-cyan),   var(--aud-green)),
+    linear-gradient(to top, var(--aud-pink),   var(--aud-cyan)) !important;
+  animation:
+    aud-strip 0.9s ease-in-out infinite,
+    aud-rgb-strip 5s linear infinite !important;
+}
+
+/* =========================================================
+   WARSTWA 2 — ikonka dźwięku: BIAŁY equalizer + BIAŁY RING
+   (nowy przycisk Firefox 136+ oraz stary overlay jako zapas)
+   ========================================================= */
+
+:root {
+  --aud-ring-size: 24px;
+  --aud-ring-width: 2px;
+  --aud-white: #fff;
+}
+
+.tabbrowser-tab[soundplaying]:not([muted]) .tab-audio-button,
+.tabbrowser-tab[soundplaying]:not([muted]) .tab-icon-overlay {
+  box-sizing: border-box !important;
+  width: var(--aud-ring-size) !important;
+  height: var(--aud-ring-size) !important;
+  min-width: var(--aud-ring-size) !important;
+  margin-block: -4px !important;          /* ring nie powiększa paska kart */
+  padding: 4px !important;
+
+  /* ring */
+  border: var(--aud-ring-width) solid var(--aud-white) !important;
+  border-radius: 50% !important;
+  box-shadow:
+    0 0 6px  var(--aud-purple),
+    0 0 12px var(--aud-pink),
+    inset 0 0 5px rgba(255, 255, 255, .35) !important;
+
+  /* białe słupki wewnątrz ringu */
+  list-style-image: none !important;
+  background-color: rgba(10, 6, 24, .55) !important;
+  background-origin: content-box !important;
+  background-clip: padding-box !important;
+  background-repeat: no-repeat !important;
+  background-position: 0% 100%, 25% 100%, 50% 100%, 75% 100%, 100% 100% !important;
+  background-size: 2px 40%, 2px 70%, 2px 100%, 2px 60%, 2px 35% !important;
+  background-image:
+    linear-gradient(to top, rgba(255,255,255,.7), var(--aud-white)),
+    linear-gradient(to top, rgba(255,255,255,.7), var(--aud-white)),
+    linear-gradient(to top, rgba(255,255,255,.7), var(--aud-white)),
+    linear-gradient(to top, rgba(255,255,255,.7), var(--aud-white)),
+    linear-gradient(to top, rgba(255,255,255,.7), var(--aud-white)) !important;
+
+  /* biel zostaje biała, obraca się tylko kolorowa poświata ringu */
+  filter: hue-rotate(0deg);
+  animation:
+    aud-bars-ring 0.9s ease-in-out infinite,
+    aud-rgb-strip 5s linear infinite !important;
+}
+
+/* ukryj natywną ikonkę głośnika w środku przycisku */
+.tabbrowser-tab[soundplaying]:not([muted]) .tab-audio-button > * {
+  opacity: 0 !important;
+}
+
+/* =========================================================
+   WARSTWA 3 — poświata karty
+   ========================================================= */
+
+.tabbrowser-tab[soundplaying]:not([muted]) .tab-background {
+  animation: aud-tab-glow 2.4s ease-in-out infinite alternate;
+}
+
+/* ---------- ANIMACJE ---------- */
+
+@keyframes aud-bars {
+  0%   { background-size: 3px 30%, 3px 80%, 3px 55%, 3px 95%, 3px 40%; }
+  20%  { background-size: 3px 90%, 3px 45%, 3px 100%, 3px 50%, 3px 75%; }
+  40%  { background-size: 3px 50%, 3px 100%, 3px 35%, 3px 80%, 3px 100%; }
+  60%  { background-size: 3px 100%, 3px 60%, 3px 85%, 3px 30%, 3px 55%; }
+  80%  { background-size: 3px 40%, 3px 90%, 3px 60%, 3px 100%, 3px 30%; }
+  100% { background-size: 3px 30%, 3px 80%, 3px 55%, 3px 95%, 3px 40%; }
+}
+
+@keyframes aud-strip {
+  0%   { background-size: 4px 3px, 4px 6px, 4px 4px, 4px 7px, 4px 3px, 4px 5px, 4px 4px; }
+  25%  { background-size: 4px 7px, 4px 3px, 4px 7px, 4px 3px, 4px 6px, 4px 3px, 4px 7px; }
+  50%  { background-size: 4px 4px, 4px 7px, 4px 3px, 4px 6px, 4px 7px, 4px 6px, 4px 3px; }
+  75%  { background-size: 4px 6px, 4px 4px, 4px 6px, 4px 4px, 4px 3px, 4px 7px, 4px 5px; }
+  100% { background-size: 4px 3px, 4px 6px, 4px 4px, 4px 7px, 4px 3px, 4px 5px, 4px 4px; }
+}
+
+@keyframes aud-rgb {
+  from { filter: drop-shadow(0 0 3px var(--aud-purple)) hue-rotate(0deg); }
+  to   { filter: drop-shadow(0 0 4px var(--aud-purple)) hue-rotate(360deg); }
+}
+
+@keyframes aud-rgb-strip {
+  from { filter: hue-rotate(0deg); }
+  to   { filter: hue-rotate(360deg); }
+}
+
+@keyframes aud-tab-glow {
+  from { box-shadow: inset 0 -2px 0 var(--aud-purple), 0 0 6px  rgba(180, 76, 255, .35); }
+  to   { box-shadow: inset 0 -2px 0 var(--aud-cyan),   0 0 12px rgba(37, 232, 255, .45); }
+}
+
+@keyframes aud-bars-ring {
+  0%   { background-size: 2px 30%, 2px 80%, 2px 55%, 2px 95%, 2px 40%; }
+  20%  { background-size: 2px 90%, 2px 45%, 2px 100%, 2px 50%, 2px 75%; }
+  40%  { background-size: 2px 50%, 2px 100%, 2px 35%, 2px 80%, 2px 100%; }
+  60%  { background-size: 2px 100%, 2px 60%, 2px 85%, 2px 30%, 2px 55%; }
+  80%  { background-size: 2px 40%, 2px 90%, 2px 60%, 2px 100%, 2px 30%; }
+  100% { background-size: 2px 30%, 2px 80%, 2px 55%, 2px 95%, 2px 40%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tabbrowser-tab[soundplaying] .tab-content,
+  .tabbrowser-tab[soundplaying] .tab-audio-button,
+  .tabbrowser-tab[soundplaying] .tab-icon-overlay,
+  .tabbrowser-tab[soundplaying] .tab-background {
+    animation: none !important;
+  }
+}

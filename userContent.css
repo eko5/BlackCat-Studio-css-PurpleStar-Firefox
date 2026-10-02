@@ -1,0 +1,323 @@
+/* =====================================================================
+   userContent.css — strona startowa "Neon Purple" (pasuje do userChrome v7)
+   Plik: <profil>/chrome/userContent.css   (obok userChrome.css)
+   Wymaga: about:config → toolkit.legacyUserProfileCustomizations.stylesheets = true
+   Działa na: about:home (strona startowa) i about:newtab (nowa karta)
+   ===================================================================== */
+
+@-moz-document url("about:home"), url("about:newtab"), url("about:blank") {
+
+  :root {
+    /* === Te same kolory co w userChrome.css === */
+    --nx-bar-top:        #4a1268;
+    --nx-bar-bottom:     #1a0528;
+    --nx-bar-line:       #a33fd4;
+    --nx-tile-top:       #3d0d55;
+    --nx-tile-bottom:    #160420;
+    --nx-tile-border:    #9b3fd0;
+    --nx-tile-hover:     #d45cff;
+    --nx-tile-active:    #ff5ee8;
+    --nx-url-bg:         #0e0214;
+    --nx-url-border:     #5c1a80;
+    --nx-text:           #ffffff;
+    --nx-text-dim:       #d4b8e8;
+    --nx-neon:           #ff7af0;
+    --nx-neon-glow:      255, 80, 230;
+    --nx-glow:           rgba(200, 80, 255, 0.55);
+    --nx-page-bg:        #1a1b20;
+
+    /* Nadpisanie zmiennych strony nowej karty Firefoksa */
+    --newtab-background-color:            var(--nx-page-bg) !important;
+    --newtab-background-color-secondary:  #1e0a2e !important;
+    --newtab-text-primary-color:          var(--nx-text) !important;
+    --newtab-text-secondary-color:        var(--nx-text-dim) !important;
+    --newtab-element-hover-color:         rgba(212, 92, 255, 0.25) !important;
+    --newtab-element-active-color:        rgba(212, 92, 255, 0.4) !important;
+    --newtab-border-color:                var(--nx-url-border) !important;
+    --newtab-textbox-background-color:    var(--nx-url-bg) !important;
+    --newtab-textbox-border:              var(--nx-url-border) !important;
+    --newtab-textbox-focus-color:         var(--nx-tile-hover) !important;
+    --newtab-primary-action-background:   var(--nx-tile-hover) !important;
+    --newtab-link-primary-color:          var(--nx-neon) !important;
+    --newtab-link-secondary-color:        var(--nx-text-dim) !important;
+    --newtab-button-background:           var(--nx-tile-top) !important;
+    --newtab-button-static-background:    var(--nx-tile-top) !important;
+    --newtab-button-static-hover-background: var(--nx-tile-hover) !important;
+    --newtab-button-text:                 var(--nx-text) !important;
+    --newtab-search-icon-color:           var(--nx-neon) !important;
+    --newtab-icon-primary-color:          var(--nx-text) !important;
+    --newtab-icon-secondary-color:        var(--nx-text-dim) !important;
+    --in-content-page-background:         var(--nx-page-bg) !important;
+    --in-content-page-color:              var(--nx-text) !important;
+  }
+
+  /* ---------- 1. Tło strony: fioletowa poświata + delikatna siatka ---------- */
+
+  html,
+  body {
+    background:
+      radial-gradient(ellipse 70% 45% at 50% 0%,  rgba(163, 63, 212, 0.45), transparent 70%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(255, 94, 232, 0.16), transparent 70%),
+      linear-gradient(180deg, var(--nx-bar-top) 0%, var(--nx-bar-bottom) 38%, var(--nx-page-bg) 100%) !important;
+    background-attachment: fixed !important;
+    color: var(--nx-text) !important;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(163, 63, 212, 0.07) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(163, 63, 212, 0.07) 1px, transparent 1px);
+    background-size: 44px 44px;
+    -webkit-mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+    mask-image: radial-gradient(ellipse at 50% 30%, #000 20%, transparent 75%);
+    animation: nx-grid-drift 18s linear infinite;
+  }
+
+  @keyframes nx-grid-drift {
+    from { background-position: 0 0, 0 0; }
+    to   { background-position: 44px 44px, 44px 44px; }
+  }
+
+  .outer-wrapper,
+  #root {
+    position: relative;
+    z-index: 1;
+    background: transparent !important;
+  }
+
+  /* ---------- 2. Logo / nagłówek: neonowy napis ---------- */
+
+  .logo-and-wordmark .logo,
+  .logo-and-wordmark .wordmark {
+    filter: drop-shadow(0 0 10px rgba(var(--nx-neon-glow), 0.8)) hue-rotate(35deg) saturate(1.4);
+  }
+
+  /* ---------- 3. Wyszukiwarka – jak pasek adresu ---------- */
+
+  .search-wrapper .search-handoff-button,
+  .search-wrapper .search-inner-wrapper input,
+  .search-wrapper input[type="search"] {
+    background: var(--nx-url-bg) !important;
+    color: var(--nx-text) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.2px;
+    border: 1px solid var(--nx-url-border) !important;
+    border-radius: 6px !important;
+    box-shadow: inset 0 0 10px rgba(130, 40, 180, 0.4) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+  }
+
+  .search-wrapper .search-handoff-button:hover,
+  .search-wrapper .search-handoff-button:focus,
+  .search-wrapper .search-inner-wrapper input:focus,
+  .search-wrapper input[type="search"]:focus {
+    border-color: var(--nx-tile-hover) !important;
+    box-shadow: 0 0 16px var(--nx-glow), inset 0 0 10px rgba(130, 40, 180, 0.4) !important;
+    transform: translateY(-1px);
+    outline: none !important;
+  }
+
+  .search-wrapper .search-handoff-button .fake-textbox,
+  .search-wrapper .search-handoff-button .fake-editable {
+    color: var(--nx-text-dim) !important;
+  }
+
+  .search-wrapper .logo-and-wordmark,
+  .search-wrapper .search-button {
+    background-color: transparent !important;
+  }
+
+  /* ---------- 4. Skróty (Top Sites) jako kafelki jak karty ---------- */
+
+  .top-site-outer {
+    animation: nx-tile-in 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+  .top-site-outer:nth-child(1) { animation-delay: 0.02s; }
+  .top-site-outer:nth-child(2) { animation-delay: 0.06s; }
+  .top-site-outer:nth-child(3) { animation-delay: 0.10s; }
+  .top-site-outer:nth-child(4) { animation-delay: 0.14s; }
+  .top-site-outer:nth-child(5) { animation-delay: 0.18s; }
+  .top-site-outer:nth-child(6) { animation-delay: 0.22s; }
+  .top-site-outer:nth-child(7) { animation-delay: 0.26s; }
+  .top-site-outer:nth-child(8) { animation-delay: 0.30s; }
+
+  @keyframes nx-tile-in {
+    0%   { opacity: 0; transform: translateY(-10px) scale(0.85); }
+    60%  { opacity: 1; transform: translateY(2px) scale(1.04); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .top-site-outer {
+    background: transparent !important;
+    border-radius: 8px !important;
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  .top-site-outer .tile {
+    background: linear-gradient(180deg, var(--nx-tile-top), var(--nx-tile-bottom)) !important;
+    border: 1px solid var(--nx-tile-border) !important;
+    border-radius: 8px !important;
+    box-shadow: inset 0 0 8px rgba(150, 50, 210, 0.35) !important;
+    transition: border-color 0.22s ease,
+                box-shadow 0.22s ease,
+                transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  }
+
+  .top-site-outer .tile .icon-wrapper,
+  .top-site-outer .tile .icon {
+    background-color: transparent !important;
+    filter: drop-shadow(0 0 5px rgba(220, 110, 255, 0.8));
+    transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+                filter 0.22s ease !important;
+  }
+
+  .top-site-outer:hover .tile,
+  .top-site-outer:focus-within .tile {
+    border-color: var(--nx-tile-hover) !important;
+    box-shadow: 0 0 16px var(--nx-glow), inset 0 0 12px rgba(180, 70, 230, 0.45) !important;
+    transform: translateY(-3px) scale(1.04);
+  }
+
+  .top-site-outer:hover .tile .icon-wrapper,
+  .top-site-outer:hover .tile .icon {
+    transform: scale(1.15);
+    filter: drop-shadow(0 0 10px rgba(255, 160, 255, 1));
+  }
+
+  .top-site-outer:active .tile {
+    transform: scale(0.94) !important;
+    transition: transform 0.1s ease !important;
+  }
+
+  /* Podpisy skrótów – neonowy tekst jak na pasku zakładek */
+  .top-site-outer .title,
+  .top-site-outer .title span {
+    color: var(--nx-neon) !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.3px !important;
+    text-shadow:
+      0 0 2px rgba(255, 255, 255, 0.85),
+      0 0 6px rgba(var(--nx-neon-glow), 0.95),
+      0 0 12px rgba(var(--nx-neon-glow), 0.6) !important;
+    transition: color 0.18s ease, text-shadow 0.18s ease !important;
+  }
+
+  .top-site-outer:hover .title,
+  .top-site-outer:hover .title span {
+    color: #fff !important;
+    text-shadow:
+      0 0 3px #fff,
+      0 0 8px rgba(var(--nx-neon-glow), 1),
+      0 0 16px rgba(var(--nx-neon-glow), 0.9) !important;
+  }
+
+  /* Przycisk „Dodaj skrót" – pusty kafelek */
+  .top-site-outer .tile .icon-wrapper[data-fallback]::before,
+  .top-site-outer .tile[data-fallback]::before {
+    color: var(--nx-text) !important;
+  }
+
+  /* Menu kontekstowe kafelka (trzy kropki) */
+  .top-site-outer .context-menu-button {
+    background-color: rgba(26, 5, 40, 0.9) !important;
+    border: 1px solid var(--nx-tile-border) !important;
+  }
+
+  /* ---------- 5. Sekcje, karty, przyciski, menu ---------- */
+
+  .card-outer,
+  .section-title,
+  .collapsible-section,
+  .ds-card,
+  .weather,
+  .wallpaper-input {
+    color: var(--nx-text) !important;
+  }
+
+  .card-outer,
+  .ds-card {
+    background: linear-gradient(180deg, var(--nx-tile-top), var(--nx-tile-bottom)) !important;
+    border: 1px solid var(--nx-tile-border) !important;
+    box-shadow: inset 0 0 8px rgba(150, 50, 210, 0.35) !important;
+    border-radius: 8px !important;
+    transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease !important;
+  }
+
+  .card-outer:hover,
+  .ds-card:hover {
+    border-color: var(--nx-tile-hover) !important;
+    box-shadow: 0 0 16px var(--nx-glow), inset 0 0 12px rgba(180, 70, 230, 0.45) !important;
+    transform: translateY(-2px);
+  }
+
+  .section-title,
+  .section-title span,
+  .collapsible-section h2 {
+    color: var(--nx-neon) !important;
+    text-shadow: 0 0 8px rgba(var(--nx-neon-glow), 0.7) !important;
+  }
+
+  /* Przycisk „Personalizuj" i podobne */
+  .personalize-button,
+  .personalize-button button,
+  button.primary,
+  .button {
+    background: linear-gradient(180deg, var(--nx-tile-top), var(--nx-tile-bottom)) !important;
+    color: var(--nx-text) !important;
+    border: 1px solid var(--nx-tile-border) !important;
+    border-radius: 6px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+  }
+
+  .personalize-button:hover,
+  .personalize-button button:hover,
+  button.primary:hover,
+  .button:hover {
+    border-color: var(--nx-tile-hover) !important;
+    box-shadow: 0 0 12px var(--nx-glow) !important;
+    transform: translateY(-1px);
+  }
+
+  .context-menu,
+  .context-menu-list,
+  .customize-menu,
+  panel-list {
+    background: #1a0a28 !important;
+    color: #fff !important;
+    border: 1px solid var(--nx-bar-line) !important;
+    box-shadow: 0 0 18px rgba(160, 50, 220, 0.5) !important;
+  }
+
+  /* ---------- 6. Odchudzenie: schowaj „śmieci" (reklamy, polecane) ---------- */
+
+  .ds-outer-wrapper-breakpoint-override,
+  .ds-layout,
+  .ds-card-grid,
+  .ds-sections,
+  .sponsored-label,
+  .ds-message-wrapper,
+  .trending-searches,
+  .promo-card,
+  .body-wrapper .ds-section-wrapper,
+  .search-wrapper .search-inner-wrapper + .ds-message,
+  .discovery-stream.ds-layout {
+    display: none !important;
+  }
+
+  /* Pasek przewijania w tym samym stylu */
+  html {
+    scrollbar-color: var(--nx-tile-border) transparent;
+    scrollbar-width: thin;
+  }
+
+  /* Zaznaczenie tekstu */
+  ::selection {
+    background: rgba(212, 92, 255, 0.5);
+    color: #fff;
+  }
+}

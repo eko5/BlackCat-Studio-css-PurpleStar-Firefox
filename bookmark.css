@@ -1,0 +1,249 @@
+/* =============================================================
+   Pasek zakładek — czytelny, szybki, multi-row (bez autohide)
+   Firefox 155 · wklej na KOŃCU userChrome.css
+   (albo zapisz jako bookmarks-bar.css i dodaj:
+    @import url("bookmarks-bar.css"); )
+   ============================================================= */
+
+:root {
+  /* --- kolory (jasny / ciemny motyw automatycznie) --- */
+  --bm-accent:   #a855f7;
+  --bm-bg:       light-dark(#f5f2fb, #16131e);
+  --bm-fg:       light-dark(#120d24, #ffffff);
+  --bm-hover:    light-dark(rgb(168 85 247 / .14), rgb(168 85 247 / .24));
+  --bm-active:   light-dark(rgb(168 85 247 / .26), rgb(168 85 247 / .40));
+  --bm-line:     light-dark(rgb(0 0 0 / .10), rgb(255 255 255 / .09));
+
+  /* --- rozmiary --- */
+  --bm-item-h:     32px;      /* wysokość jednej zakładki */
+  --bm-item-max-w: 280px;     /* maks. szerokość etykiety */
+  --bm-gap:        4px;       /* odstęp między zakładkami i wierszami */
+  --bm-font-size:  14px;
+}
+
+/* ---------- 1. PASEK (stale widoczny, w normalnym układzie) ---------- */
+#PersonalToolbar {
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  padding: 6px 8px !important;
+
+  background: var(--bm-bg) !important;
+  color: var(--bm-fg) !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--bm-line) !important;
+}
+
+/* ---------- 2. MULTI-ROW (zawijanie do kolejnych wierszy) ---------- */
+#personal-bookmarks,
+#PlacesToolbar {
+  flex: 1 1 100% !important;
+  min-width: 0 !important;
+  height: auto !important;
+}
+
+#PlacesToolbarItems {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-content: flex-start;
+  gap: var(--bm-gap);
+  overflow: visible !important;
+  height: auto !important;
+}
+
+/* przy zawijaniu strzałka »  jest zbędna */
+#PlacesChevron {
+  display: none !important;
+}
+
+/* ---------- 3. CZYTELNOŚĆ ---------- */
+#PersonalToolbar .bookmark-item {
+  flex: 0 1 auto;
+  height: var(--bm-item-h);
+  max-width: var(--bm-item-max-w);
+  margin: 0 !important;
+  padding: 0 10px !important;
+  border-radius: 8px !important;
+
+  color: var(--bm-fg) !important;
+  font-family: "Segoe UI Variable Text", "Segoe UI", system-ui, sans-serif;
+  font-size: var(--bm-font-size);
+  font-weight: 500;
+  letter-spacing: .005em;
+
+  transition: background-color 70ms linear;
+}
+
+#PersonalToolbar .bookmark-item .toolbarbutton-icon {
+  width: 16px;
+  height: 16px;
+  margin-inline-end: 7px !important;
+}
+
+#PersonalToolbar .bookmark-item .toolbarbutton-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* foldery: akcentowy kolor ikony */
+#PersonalToolbar .bookmark-item[container] .toolbarbutton-icon {
+  -moz-context-properties: fill, fill-opacity;
+  fill: var(--bm-accent);
+  fill-opacity: 1;
+}
+
+#PersonalToolbar .bookmark-item:hover {
+  background: var(--bm-hover) !important;
+}
+
+#PersonalToolbar .bookmark-item:hover:active,
+#PersonalToolbar .bookmark-item[open] {
+  background: var(--bm-active) !important;
+}
+
+/* widoczny fokus z klawiatury */
+#PersonalToolbar .bookmark-item:focus-visible {
+  outline: 2px solid var(--bm-accent);
+  outline-offset: -2px;
+}
+
+/* separatory — cienka pionowa kreska */
+#PersonalToolbar toolbarseparator {
+  appearance: none !important;
+  width: 1px !important;
+  height: 18px !important;
+  margin: 5px 6px !important;
+  background: var(--bm-line) !important;
+  border: 0 !important;
+}
+
+/* ---------- 4. MENU FOLDERÓW ---------- */
+#PlacesToolbar menupopup {
+  --panel-border-radius: 10px;
+  font-size: var(--bm-font-size);
+}
+
+/* ---------- 6. CZYTELNOŚĆ+ : bez poświaty neonowej, ostry tekst ---------- */
+/* Poświata (text-shadow / drop-shadow z motywu neonowego) rozmywa litery —
+   wyłączamy ją na tekście i ikonach; neon zostaje tylko na obramowaniu przy hoverze. */
+#PersonalToolbar #PlacesToolbarItems .bookmark-item,
+#PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-text,
+#PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-icon {
+  text-shadow: none !important;
+  filter: none !important;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item {
+  color: var(--bm-fg) !important;
+  font-weight: 600 !important;
+  letter-spacing: .01em;
+  padding: 0 12px !important;
+  /* delikatna "kapsuła" — oddziela sąsiednie zakładki bez szumu */
+  background: light-dark(rgb(168 85 247 / .07), rgb(255 255 255 / .05)) !important;
+  border: 1px solid transparent !important;
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:hover {
+  background: var(--bm-hover) !important;
+  border-color: var(--bm-accent) !important;
+  box-shadow: 0 0 0 1px rgb(168 85 247 / .35);   /* neon tylko na ramce */
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:hover:active,
+#PersonalToolbar #PlacesToolbarItems .bookmark-item[open] {
+  background: var(--bm-active) !important;
+}
+
+/* ikony: pełna ostrość i trochę większe */
+#PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-icon {
+  width: 18px !important;
+  height: 18px !important;
+  margin-inline-end: 8px !important;
+  opacity: 1 !important;
+}
+
+/* ---------- 7. TRYB IKON: sam symbol, opis rozwija się po najechaniu ---------- */
+/* Opis wysuwa się jako nakładka (position:absolute), więc NIE przesuwa
+   sąsiednich ikon i wiersze się nie przeskakują. */
+:root {
+  --bm-pop-bg:  light-dark(#eadffb, #2b2040);   /* pełne (nieprzezroczyste) tło rozwiniętej etykiety */
+  --bm-pop-max: 320px;                          /* maks. szerokość rozwiniętego opisu */
+  --bm-pop-delay: 90ms;                         /* zwłoka przed rozwinięciem (anty-migotanie) */
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item {
+  position: relative;
+  max-width: none !important;
+  padding: 0 8px !important;
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-icon {
+  position: relative;
+  z-index: 1;                 /* ikona zawsze nad nakładką */
+  margin-inline-end: 0 !important;
+}
+
+/* etykieta: ukryta, gotowa do rozwinięcia */
+#PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-text {
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  height: calc(100% + 2px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: max-content;
+  max-width: var(--bm-pop-max);
+  padding-inline: 34px 12px;  /* 8 + 18 (ikona) + 8 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  background: var(--bm-pop-bg);
+  border: 1px solid var(--bm-accent);
+  border-radius: 8px;
+  box-shadow: 0 6px 16px rgb(0 0 0 / .30);
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 80ms ease-out 0s;
+}
+
+/* rozwinięcie po najechaniu / fokusie z klawiatury */
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:hover,
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:focus-visible {
+  z-index: 5;                 /* nad sąsiadami */
+  border-color: transparent !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:hover .toolbarbutton-text,
+#PersonalToolbar #PlacesToolbarItems .bookmark-item:focus-visible .toolbarbutton-text {
+  opacity: 1;
+  transition-delay: var(--bm-pop-delay);
+}
+
+/* --- OPCJONALNIE: foldery z widocznym opisem (bo mają identyczne ikony) ---
+   Odkomentuj, jeśli chcesz odróżniać foldery bez najeżdżania:
+
+#PersonalToolbar #PlacesToolbarItems .bookmark-item[container] {
+  padding: 0 12px !important;
+}
+#PersonalToolbar #PlacesToolbarItems .bookmark-item[container] .toolbarbutton-icon {
+  margin-inline-end: 8px !important;
+}
+#PersonalToolbar #PlacesToolbarItems .bookmark-item[container] .toolbarbutton-text {
+  position: static; opacity: 1; padding: 0; background: none; border: 0;
+  box-shadow: none; pointer-events: auto; height: auto; width: auto;
+}
+*/
+
+@media (prefers-reduced-motion: reduce) {
+  #PersonalToolbar #PlacesToolbarItems .bookmark-item .toolbarbutton-text {
+    transition: none !important;
+  }
+}

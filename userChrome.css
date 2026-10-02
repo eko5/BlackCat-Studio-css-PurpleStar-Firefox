@@ -1,0 +1,1133 @@
+/* Import */
+
+@import url(audio.css);
+@import url(dia.css);
+@import url(fullscreen.css);
+
+/* =====================================================================
+   userChrome.css — Firefox 120+ — "Neon Purple One-Row" v7 (scalony)
+   Układ: [← → ⟳ | pasek adresu | ⬇ 🧩 ☰ | kafelki kart ... | + ]
+   Wymaga: about:config → toolkit.legacyUserProfileCustomizations.stylesheets = true
+   Plik: <profil>/chrome/userChrome.css
+   Ten plik ZASTĘPUJE całą poprzednią wersję (v6 + obie łatki).
+   ===================================================================== */
+
+:root {
+  /* === Kolory === */
+  --nx-bar-top:        #4a1268;
+  --nx-bar-bottom:     #1a0528;
+  --nx-bar-line:       #a33fd4;
+  --nx-tile-top:       #3d0d55;
+  --nx-tile-bottom:    #160420;
+  --nx-tile-border:    #9b3fd0;
+  --nx-tile-hover:     #d45cff;
+  --nx-tile-active:    #ff5ee8;
+  --nx-url-bg:         #0e0214;
+  --nx-url-border:     #5c1a80;
+  --nx-text:           #ffffff;
+  --nx-text-dim:       #d4b8e8;
+  --nx-neon:           #ff7af0;
+  --nx-neon-glow:      255, 80, 230;
+  --nx-neon-hover:     #ffffff;
+  --nx-glow:           rgba(200, 80, 255, 0.55);
+  --nx-icon-fill:      #f3e2ff;
+
+  /* === Rozmiary (jedno źródło prawdy) === */
+  --nx-bar-height:     50px;   /* wysokość całego rzędu */
+  --nx-tile-w:         92px;
+  --nx-tile-h:         36px;
+  --nx-tile-gap:       4px;
+  --nx-url-w:          280px;
+  --nx-icon:           20px;   /* ikona na kafelku karty */
+  --nx-btn-size:       34px;   /* pole każdego przycisku na pasku */
+  --nx-btn-icon:       18px;   /* grafika w przycisku */
+  --nx-btn-gap:        4px;    /* równy odstęp między przyciskami */
+
+  /* Nadpisanie zmiennych Firefoksa */
+  --toolbar-bgcolor: transparent !important;
+  --toolbar-color: var(--nx-text) !important;
+  --toolbar-field-background-color: var(--nx-url-bg) !important;
+  --toolbar-field-color: var(--nx-text) !important;
+  --toolbar-field-border-color: var(--nx-url-border) !important;
+  --toolbar-field-focus-background-color: #180528 !important;
+  --toolbar-field-focus-border-color: var(--nx-tile-hover) !important;
+  --lwt-toolbarbutton-hover-background: rgba(212, 92, 255, 0.25) !important;
+  --lwt-toolbarbutton-active-background: rgba(212, 92, 255, 0.4) !important;
+  --toolbarbutton-icon-fill: var(--nx-icon-fill) !important;
+  --arrowpanel-background: #1a0a28 !important;
+  --arrowpanel-color: #fff !important;
+  --arrowpanel-border-color: var(--nx-bar-line) !important;
+}
+
+/* ---------- 1. Główny pasek (jeden rząd) ---------- */
+
+#navigator-toolbox {
+  display: grid !important;
+  grid-template-columns: max-content minmax(0, 1fr) !important;
+  grid-template-rows: auto auto !important;
+  align-items: center !important;
+  background: linear-gradient(180deg, var(--nx-bar-top), var(--nx-bar-bottom)) !important;
+  border: none !important;
+  border-bottom: 1px solid var(--nx-bar-line) !important;
+  box-shadow: 0 2px 14px rgba(160, 50, 220, 0.4) !important;
+  min-height: var(--nx-bar-height) !important;
+}
+
+#nav-bar {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: var(--nx-bar-height) !important;
+  padding-inline: 6px 4px !important;
+}
+
+#titlebar {
+  grid-column: 2 !important;
+  grid-row: 1 !important;
+  min-width: 0 !important;
+  background: transparent !important;
+  -moz-appearance: none !important;
+}
+
+#TabsToolbar {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  min-height: var(--nx-bar-height) !important;
+  padding: 0 6px !important;
+}
+
+/* Pasek zakładek w drugim rzędzie */
+#PersonalToolbar {
+  grid-column: 1 / -1 !important;
+  grid-row: 2 !important;
+  background: rgba(18, 3, 28, 0.9) !important;
+  border-top: 1px solid var(--nx-url-border) !important;
+}
+
+#toolbar-menubar {
+  display: none !important;
+}
+
+/* Wspólna oś pionowa: wszystko wyśrodkowane w rzędzie */
+#nav-bar,
+#TabsToolbar,
+#nav-bar-customization-target,
+#PanelUI-button,
+#stop-reload-button,
+#tabbrowser-tabs,
+#tabbrowser-arrowscrollbox {
+  align-items: center !important;
+  -moz-box-align: center !important;
+}
+
+/* ---------- 2. Przyciski nawigacji ---------- */
+
+#nav-bar-customization-target {
+  flex: none !important;
+  gap: var(--nx-btn-gap) !important;
+}
+
+/* Biała lista – na pasku zostaje TYLKO to, co wymienione poniżej.
+   (Ukrywa m.in. przypięte rozszerzenia, zrzuty ekranu, spacery.) */
+#nav-bar-customization-target > :not(#back-button):not(#forward-button):not(#stop-reload-button):not(#urlbar-container):not(#downloads-button):not(#unified-extensions-button):not(#PanelUI-menu-button) {
+  display: none !important;
+}
+
+/* Dodatkowe ukrycia poza białą listą */
+#fxa-toolbar-menu-button,
+#nav-bar-overflow-button,
+#firefox-view-button,
+#sidebar-button,
+#library-button,
+#home-button,
+#alltabs-button,
+#nav-bar toolbarspring,
+#nav-bar toolbarspacer,
+#nav-bar toolbarseparator,
+#TabsToolbar toolbarspring,
+#TabsToolbar toolbarspacer,
+#TabsToolbar toolbarseparator,
+#nav-bar .chromeclass-toolbar-additional[type="spring"],
+#nav-bar-customization-target .webextension-browser-action,
+#nav-bar-customization-target .unified-extensions-item {
+  display: none !important;
+}
+
+/* Identyczne pola dla wszystkich przycisków (tylko po ID – bez
+   szerokich selektorów, które łamały białą listę) */
+#back-button,
+#forward-button,
+#stop-reload-button > #reload-button,
+#stop-reload-button > #stop-button,
+#downloads-button,
+#unified-extensions-button,
+#PanelUI-menu-button {
+  flex: 0 0 var(--nx-btn-size) !important;
+  width: var(--nx-btn-size) !important;
+  min-width: var(--nx-btn-size) !important;
+  max-width: var(--nx-btn-size) !important;
+  height: var(--nx-btn-size) !important;
+  min-height: var(--nx-btn-size) !important;
+  max-height: var(--nx-btn-size) !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  border-radius: 6px !important;
+  transition: background 0.15s ease, transform 0.15s ease, filter 0.15s ease !important;
+}
+
+/* Grafika w środku – jeden rozmiar, wyśrodkowana */
+#back-button > .toolbarbutton-icon,
+#forward-button > .toolbarbutton-icon,
+#reload-button > .toolbarbutton-icon,
+#stop-button > .toolbarbutton-icon,
+#downloads-button .toolbarbutton-icon,
+#unified-extensions-button .toolbarbutton-icon,
+#PanelUI-menu-button .toolbarbutton-icon {
+  width: var(--nx-btn-icon) !important;
+  height: var(--nx-btn-icon) !important;
+  min-width: var(--nx-btn-icon) !important;
+  min-height: var(--nx-btn-icon) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+  fill: var(--nx-icon-fill) !important;
+  -moz-context-properties: fill, fill-opacity !important;
+}
+
+#downloads-button .toolbarbutton-badge-stack,
+#unified-extensions-button .toolbarbutton-badge-stack,
+#PanelUI-menu-button .toolbarbutton-badge-stack {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+#nav-bar .toolbarbutton-text,
+#nav-bar .toolbarbutton-multiline-text {
+  display: none !important;
+}
+
+#back-button:hover,
+#forward-button:hover,
+#reload-button:hover,
+#stop-button:hover,
+#downloads-button:hover,
+#unified-extensions-button:hover,
+#PanelUI-menu-button:hover {
+  background: rgba(212, 92, 255, 0.28) !important;
+  filter: drop-shadow(0 0 6px rgba(210, 90, 255, 0.75));
+}
+
+#back-button:active,
+#forward-button:active,
+#reload-button:active,
+#stop-button:active,
+#downloads-button:active,
+#unified-extensions-button:active,
+#PanelUI-menu-button:active {
+  transform: scale(0.93);
+}
+
+#back-button[disabled],
+#forward-button[disabled] {
+  opacity: 0.4 !important;
+}
+
+/* Stop / Reload – tylko jeden naraz */
+#stop-reload-button[displaystop] > #reload-button,
+#stop-reload-button:not([displaystop]) > #stop-button {
+  display: none !important;
+}
+
+/* ---------- 3. Pasek adresu ---------- */
+
+#urlbar-container {
+  flex: none !important;
+  width: var(--nx-url-w) !important;
+  min-width: var(--nx-url-w) !important;
+  max-width: var(--nx-url-w) !important;
+  margin: 0 8px !important;
+  align-self: center !important;
+}
+
+#urlbar {
+  --urlbar-height: var(--nx-btn-size) !important;
+  --urlbar-min-height: var(--nx-btn-size) !important;
+  align-self: center !important;
+}
+
+/* Zmienne paska adresu – nadpisują domyślne (jasne) kolory Firefoksa,
+   dzięki czemu tło jest ciemne w każdym stanie (spoczynek/hover/fokus) */
+#urlbar,
+#urlbar-container {
+  --toolbar-field-background-color: var(--nx-url-bg) !important;
+  --toolbar-field-focus-background-color: #1c0630 !important;
+  --toolbar-field-color: #ffffff !important;
+  --toolbar-field-focus-color: #ffffff !important;
+  --urlbar-box-bgcolor: var(--nx-url-bg) !important;
+  --urlbar-box-hover-bgcolor: #1c0630 !important;
+  --urlbar-box-focus-bgcolor: #1c0630 !important;
+  --urlbar-box-text-color: #ffffff !important;
+  --urlbar-box-hover-text-color: #ffffff !important;
+  --urlbar-box-focus-text-color: #ffffff !important;
+}
+
+#urlbar-background,
+#urlbar:not([focused]) > #urlbar-background,
+#urlbar:not([open]) > #urlbar-background,
+#urlbar[focused] > #urlbar-background,
+#urlbar[open] > #urlbar-background,
+#urlbar[breakout][breakout-extend] > #urlbar-background {
+  background: var(--nx-url-bg) !important;
+  background-color: var(--nx-url-bg) !important;
+  border: 1px solid var(--nx-url-border) !important;
+  border-radius: 5px !important;
+  box-shadow: inset 0 0 10px rgba(130, 40, 180, 0.4) !important;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#urlbar[focused] > #urlbar-background,
+#urlbar:hover > #urlbar-background,
+#urlbar[breakout][breakout-extend] > #urlbar-background {
+  background: #1c0630 !important;
+  border-color: var(--nx-tile-hover) !important;
+  box-shadow: 0 0 12px var(--nx-glow) !important;
+}
+
+/* Tekst adresu URL – biały, wyraźny, bez rozmycia */
+#urlbar-input,
+#urlbar .urlbar-input,
+#urlbar:not([focused]) #urlbar-input,
+#urlbar[focused] #urlbar-input {
+  color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.2px;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Podpowiedź, gdy pasek jest pusty */
+#urlbar-input::placeholder {
+  color: var(--nx-text-dim) !important;
+  -moz-text-fill-color: var(--nx-text-dim) !important;
+  opacity: 1 !important;
+}
+
+/* Zaznaczony tekst */
+#urlbar-input::selection {
+  background: #c44dff !important;
+  color: #ffffff !important;
+}
+
+#urlbar .urlbar-input-box {
+  color: #ffffff !important;
+}
+
+/* Ikona kłódki / tożsamości */
+#identity-icon,
+#urlbar .urlbar-icon {
+  fill: var(--nx-icon-fill) !important;
+  color: var(--nx-icon-fill) !important;
+  opacity: 1 !important;
+}
+
+/* Lista podpowiedzi pod paskiem adresu */
+#urlbar-results,
+.urlbarView {
+  background: #14041f !important;
+  color: #ffffff !important;
+}
+
+.urlbarView-row {
+  color: #ffffff !important;
+}
+
+.urlbarView-title,
+.urlbarView-title-separator {
+  color: #ffffff !important;
+}
+
+.urlbarView-url,
+.urlbarView-action {
+  color: #8fe9ff !important;   /* adresy w podpowiedziach – jasny cyjan */
+}
+
+.urlbarView-row:hover,
+.urlbarView-row[selected] {
+  background: rgba(212, 92, 255, 0.28) !important;
+}
+
+.urlbarView-row[selected] .urlbarView-title,
+.urlbarView-row[selected] .urlbarView-url,
+.urlbarView-row[selected] .urlbarView-action {
+  color: #ffffff !important;
+}
+
+/* --- Wpisywanie w pasku adresu: żadnych białych pól --- */
+#urlbar,
+#urlbar-container,
+#urlbar[focused],
+#urlbar[open],
+#urlbar[usertyping],
+#urlbar[breakout][breakout-extend] {
+  color-scheme: dark !important;   /* systemowe kolory pól (Field/Canvas) też ciemne */
+}
+
+#urlbar-input-container,
+.urlbar-input-container,
+#urlbar-input,
+#urlbar .urlbar-input,
+.urlbar-input-box,
+#urlbar:not([focused]) #urlbar-input,
+#urlbar[focused] #urlbar-input,
+#urlbar[open] #urlbar-input,
+#urlbar[usertyping] #urlbar-input {
+  background: transparent !important;
+  background-color: transparent !important;
+  color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+  caret-color: #ff7af0 !important;
+  opacity: 1 !important;
+}
+
+/* Tło w trakcie pisania / z otwartą listą – ciemne, nie białe */
+#urlbar[focused] > #urlbar-background,
+#urlbar[open] > #urlbar-background,
+#urlbar[usertyping] > #urlbar-background,
+#urlbar[breakout][breakout-extend] > #urlbar-background,
+#urlbar[breakout][breakout-extend][focused] > #urlbar-background {
+  background: #1c0630 !important;
+  background-color: #1c0630 !important;
+  border: 1px solid var(--nx-tile-hover) !important;
+  box-shadow: 0 0 12px var(--nx-glow) !important;
+}
+
+/* Podpowiedziane dopełnienie (autofill) */
+#urlbar-input::selection,
+#urlbar-input:-moz-autofill::selection {
+  background: #c44dff !important;
+  color: #ffffff !important;
+  -moz-text-fill-color: #ffffff !important;
+}
+
+/* Uproszczenie paska adresu */
+#star-button-box,
+#reader-mode-button,
+#urlbar-go-button,
+#pageActionButton,
+#urlbar-zoom-button,
+#picture-in-picture-button,
+#translations-button,
+#tracking-protection-icon-container,
+.urlbar-history-dropmarker,
+#identity-box #identity-icon-label,
+#identity-box #identity-label,
+#search-container,
+#searchbar,
+#urlbar-searchmode-switcher,
+#urlbar-search-mode-indicator,
+#searchmode-switcher,
+#searchmode-switcher-chicklet,
+.searchmode-switcher {
+  display: none !important;
+}
+
+#identity-box {
+  margin-inline-end: 0 !important;
+}
+
+/* ---------- 4. Karty jako kafelki + animacje ---------- */
+
+#tabbrowser-tabs {
+  --tab-min-height: var(--nx-tile-h) !important;
+  min-height: var(--nx-bar-height) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.tabbrowser-tab {
+  padding: 0 !important;
+  margin: 0 calc(var(--nx-tile-gap) / 2) !important;
+  align-self: center !important;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+              opacity 0.2s ease !important;
+}
+
+.tabbrowser-tab[fadein]:not([pinned]),
+.tabbrowser-tab[pinned] {
+  min-width: 44px !important;
+  max-width: var(--nx-tile-w) !important;
+}
+
+.tabbrowser-tab[pinned] {
+  width: var(--nx-tile-w) !important;
+}
+
+/* Tło kafelka */
+.tab-background {
+  margin-block: 0 !important;
+  min-height: var(--nx-tile-h) !important;
+  height: var(--nx-tile-h) !important;
+  border-radius: 6px !important;
+  border: 1px solid var(--nx-tile-border) !important;
+  background: linear-gradient(180deg, var(--nx-tile-top), var(--nx-tile-bottom)) !important;
+  box-shadow: inset 0 0 8px rgba(150, 50, 210, 0.35) !important;
+  outline: none !important;
+  transition: border-color 0.22s ease,
+              box-shadow 0.22s ease,
+              transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              background 0.22s ease !important;
+}
+
+.tab-content {
+  justify-content: center !important;
+  padding: 0 !important;
+  height: var(--nx-tile-h) !important;
+}
+
+.tab-label-container,
+.tab-secondary-label,
+.tab-close-button,
+.tab-context-line {
+  display: none !important;
+}
+
+.tab-icon-stack {
+  margin: 0 !important;
+}
+
+.tab-icon-image {
+  width: var(--nx-icon) !important;
+  height: var(--nx-icon) !important;
+  margin: 0 !important;
+  filter: drop-shadow(0 0 5px rgba(220, 110, 255, 0.8));
+  transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.22s ease !important;
+}
+
+/* ===== ANIMACJE ===== */
+
+/* 1. Pojawianie się nowej karty */
+.tabbrowser-tab[fadein] {
+  animation: nx-tab-in 0.28s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+}
+
+@keyframes nx-tab-in {
+  0%   { opacity: 0; transform: translateY(-10px) scale(0.85); }
+  60%  { opacity: 1; transform: translateY(2px) scale(1.04); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* 2. Hover – uniesienie + mocniejszy glow */
+.tabbrowser-tab:hover:not([selected]) .tab-background {
+  border-color: var(--nx-tile-hover) !important;
+  box-shadow: 0 0 14px var(--nx-glow),
+              inset 0 0 12px rgba(180, 70, 230, 0.45) !important;
+  transform: translateY(-2px) scale(1.03);
+}
+
+.tabbrowser-tab:hover .tab-icon-image {
+  transform: scale(1.18);
+  filter: drop-shadow(0 0 10px rgba(255, 160, 255, 1));
+}
+
+/* 3. Aktywna karta – neon + subtelna pulsacja */
+.tabbrowser-tab[selected] .tab-background {
+  border-color: var(--nx-tile-active) !important;
+  background: linear-gradient(180deg, #6b1a95, #2e0848) !important;
+  box-shadow: 0 0 16px rgba(255, 90, 230, 0.7),
+              inset 0 0 14px rgba(230, 100, 255, 0.5) !important;
+  animation: nx-active-glow 2.4s ease-in-out infinite;
+}
+
+@keyframes nx-active-glow {
+  0%, 100% {
+    box-shadow: 0 0 14px rgba(255, 90, 230, 0.55),
+                inset 0 0 12px rgba(230, 100, 255, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 22px rgba(255, 90, 230, 0.9),
+                inset 0 0 16px rgba(230, 100, 255, 0.6);
+  }
+}
+
+.tabbrowser-tab[selected] .tab-icon-image {
+  filter: drop-shadow(0 0 8px rgba(255, 140, 255, 1));
+  transform: scale(1.08);
+}
+
+/* 4. Karta z dźwiękiem – wyraźniejsza pulsacja */
+.tabbrowser-tab[soundplaying] .tab-background {
+  animation: nx-sound-pulse 1.4s ease-in-out infinite !important;
+}
+
+@keyframes nx-sound-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(255, 90, 230, 0.4),
+                inset 0 0 8px rgba(150, 50, 210, 0.35);
+    border-color: var(--nx-tile-border);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(255, 90, 230, 0.95),
+                inset 0 0 14px rgba(210, 80, 250, 0.6);
+    border-color: var(--nx-tile-active);
+  }
+}
+
+/* 5. Kliknięcie – lekkie wciśnięcie */
+.tabbrowser-tab:active .tab-background {
+  transform: scale(0.94) !important;
+  transition: transform 0.1s ease !important;
+}
+
+#tabbrowser-tabs .tabbrowser-tab::after,
+#tabbrowser-tabs .tabbrowser-tab::before {
+  display: none !important;
+}
+
+#tabbrowser-arrowscrollbox {
+  --tab-overflow-pinned-tabs-width: 0px;
+}
+
+/* ---------- 5. Przycisk nowej karty (+) ---------- */
+
+/* Zostaje TYLKO „+" przy kartach; duplikat z paska narzędzi znika */
+#TabsToolbar-customization-target > #new-tab-button,
+#nav-bar-customization-target > #new-tab-button,
+#new-tab-button {
+  display: none !important;
+}
+
+#tabs-newtab-button {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 0 0 var(--nx-btn-size) !important;
+  width: var(--nx-btn-size) !important;
+  min-width: var(--nx-btn-size) !important;
+  max-width: var(--nx-btn-size) !important;
+  height: var(--nx-btn-size) !important;
+  min-height: var(--nx-btn-size) !important;
+  max-height: var(--nx-btn-size) !important;
+  box-sizing: border-box !important;
+  margin: 0 0 0 5px !important;
+  padding: 0 !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: center !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(190, 110, 255, 0.45) !important;
+  background: rgba(120, 50, 200, 0.22) !important;
+  box-shadow: 0 0 8px rgba(190, 110, 255, 0.3) !important;
+  cursor: pointer;
+  transition: background 0.18s ease,
+              box-shadow 0.18s ease,
+              transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+              filter 0.18s ease !important;
+}
+
+#tabs-newtab-button > .toolbarbutton-icon {
+  width: var(--nx-btn-icon) !important;
+  height: var(--nx-btn-icon) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  list-style-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M8 2v12M2 8h12' stroke='context-fill' stroke-width='1.8' stroke-linecap='round' fill='none'/%3E%3C/svg%3E") !important;
+  -moz-context-properties: fill, stroke !important;
+  fill: var(--nx-icon-fill) !important;
+  stroke: var(--nx-icon-fill) !important;
+}
+
+/* Hover: obrót + glow */
+#tabs-newtab-button:hover {
+  background: rgba(190, 110, 255, 0.38) !important;
+  box-shadow: 0 0 14px rgba(210, 140, 255, 0.75) !important;
+  transform: rotate(90deg) scale(1.1);
+  filter: drop-shadow(0 0 8px rgba(210, 90, 255, 0.8));
+}
+
+/* ---------- 6. Przyciski okna ---------- */
+
+.titlebar-buttonbox-container,
+.titlebar-buttonbox,
+.titlebar-spacer,
+.titlebar-min,
+.titlebar-max,
+.titlebar-close,
+.titlebar-restore,
+#titlebar-buttonbox-container,
+#titlebar-buttonbox {
+  display: none !important;
+  width: 0 !important;
+  max-width: 0 !important;
+  min-width: 0 !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+/* ---------- 7. Obszar strony ---------- */
+
+#appcontent,
+#browser,
+#tabbrowser-tabpanels {
+  background: #1a1b20 !important;
+}
+
+#navigator-toolbox-background {
+  display: none !important;
+}
+
+/* Usunięcie białego paska/ramki wokół obszaru strony i przy panelu bocznym */
+:root {
+  --chrome-content-separator-color: transparent !important;
+  --content-area-shadow: none !important;
+  --sidebar-border-color: transparent !important;
+  --tabpanel-border-color: transparent !important;
+  --splitter-color: transparent !important;
+}
+
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+.browserContainer,
+.browserSidebarContainer,
+#appcontent,
+#sidebar-box,
+#sidebar-main,
+#sidebar-main::before,
+#sidebar-main::after,
+#sidebar-box::before,
+#sidebar-box::after {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+#tabbrowser-tabbox,
+#tabbrowser-tabpanels,
+.browserContainer,
+.browserSidebarContainer,
+#sidebar-box {
+  border: none !important;
+  border-image: none !important;
+}
+
+#sidebar-splitter,
+#sidebar-main + splitter,
+splitter.sidebar-splitter,
+#appcontent > splitter,
+#browser > splitter {
+  background: transparent !important;
+  border: none !important;
+  border-image: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  opacity: 0 !important;
+  width: 4px !important;
+  min-width: 4px !important;
+}
+
+/* ---------- 8. Neonowa czcionka w pasku zakładek ---------- */
+
+#PersonalToolbar .toolbarbutton-text,
+#PlacesToolbarItems .bookmark-item .toolbarbutton-text,
+#PersonalToolbar #import-button .toolbarbutton-text,
+#OtherBookmarks .toolbarbutton-text,
+#PersonalToolbar-empty-desc {
+  color: var(--nx-neon) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  text-shadow:
+    0 0 2px rgba(255, 255, 255, 0.85),
+    0 0 6px rgba(var(--nx-neon-glow), 0.95),
+    0 0 12px rgba(var(--nx-neon-glow), 0.7),
+    0 0 22px rgba(var(--nx-neon-glow), 0.45) !important;
+  transition: color 0.18s ease, text-shadow 0.18s ease !important;
+}
+
+#PlacesToolbarItems .bookmark-item:hover .toolbarbutton-text,
+#PersonalToolbar toolbarbutton:hover .toolbarbutton-text {
+  color: var(--nx-neon-hover) !important;
+  text-shadow:
+    0 0 3px #fff,
+    0 0 8px rgba(var(--nx-neon-glow), 1),
+    0 0 16px rgba(var(--nx-neon-glow), 0.9),
+    0 0 28px rgba(var(--nx-neon-glow), 0.7) !important;
+}
+
+#PlacesToolbarItems .bookmark-item:hover,
+#PersonalToolbar toolbarbutton:hover {
+  background: rgba(212, 92, 255, 0.2) !important;
+  border-radius: 5px !important;
+}
+
+/* =====================================================================
+   9. KARTY PIONOWE — motyw "Neon Purple Sidebar"
+   ---------------------------------------------------------------------
+   Sekcja włącza się AUTOMATYCZNIE, gdy w Firefoksie są włączone karty
+   pionowe (Ustawienia → Ogólne → Wygląd przeglądarki → Karty pionowe
+   albo about:config → sidebar.verticalTabs = true).
+   Wszystkie reguły są zawężone do #tabbrowser-tabs[orient="vertical"]
+   lub :root:has(#tabbrowser-tabs[orient="vertical"]), więc po powrocie
+   do kart poziomych przestają działać, a sekcje 1–8 zostają bez zmian.
+   ===================================================================== */
+
+/* ---------- 9.0 Zmienne motywu pionowego ---------- */
+
+:root:has(#tabbrowser-tabs[orient="vertical"]) {
+  --nx-v-bg-top:     #2a0a40;
+  --nx-v-bg-bottom:  #12031c;
+  --nx-v-row-h:      46px;   /* wysokość karty, gdy panel jest rozwinięty */
+  --nx-v-col-h:      38px;   /* wysokość karty, gdy panel jest zwinięty   */
+  --nx-v-pin:        38px;   /* bok kafelka przypiętej karty              */
+  --nx-v-radius:     8px;
+  --nx-v-gap:        3px;
+
+  /* Zmienne Firefoksa dla panelu bocznego */
+  --sidebar-background-color: #170522;
+  --sidebar-text-color: #ffffff;
+  --sidebar-border-color: var(--nx-bar-line);
+}
+
+/* ---------- 9.1 Górny rząd: pasek adresu na pełną szerokość ---------- */
+
+:root:has(#tabbrowser-tabs[orient="vertical"]) #navigator-toolbox {
+  grid-template-columns: minmax(0, 1fr) max-content !important;
+}
+
+/* Bez kart w rzędzie: pasek nawigacji dostaje całą wolną szerokość */
+:root:has(#tabbrowser-tabs[orient="vertical"]) #nav-bar-customization-target {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+:root:has(#tabbrowser-tabs[orient="vertical"]) #urlbar-container {
+  flex: 1 1 auto !important;
+  width: auto !important;
+  min-width: 200px !important;
+  max-width: none !important;
+}
+
+/* Wąski uchwyt do przeciągania okna (przyciski okna są ukryte w sekcji 6) */
+:root:has(#tabbrowser-tabs[orient="vertical"]) #titlebar {
+  min-width: 56px !important;
+  -moz-window-dragging: drag !important;
+}
+
+/* ---------- 9.2 Panel boczny ---------- */
+
+:root:has(#tabbrowser-tabs[orient="vertical"]) #sidebar-main {
+  background: linear-gradient(180deg, var(--nx-v-bg-top), var(--nx-v-bg-bottom)) !important;
+  color: var(--nx-text) !important;
+  border-inline-end: 1px solid var(--nx-bar-line) !important;
+  box-shadow: 4px 0 16px rgba(160, 50, 220, 0.35) !important;
+}
+
+:root:has(#tabbrowser-tabs[orient="vertical"]) #vertical-tabs,
+#tabbrowser-tabs[orient="vertical"] {
+  background: transparent !important;
+}
+
+/* Kontener kart: kolumna, karty rozciągnięte na całą szerokość */
+#tabbrowser-tabs[orient="vertical"] {
+  --nx-v-tab-h: var(--nx-v-col-h);
+  --tab-min-height: var(--nx-v-tab-h) !important;
+  min-height: 0 !important;
+  padding: 6px 6px !important;
+  align-items: stretch !important;
+  -moz-box-align: stretch !important;
+}
+
+#tabbrowser-tabs[orient="vertical"][expanded] {
+  --nx-v-tab-h: var(--nx-v-row-h);
+}
+
+#tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox {
+  align-items: stretch !important;
+  -moz-box-align: stretch !important;
+}
+
+/* Cienki neonowy suwak */
+#tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox,
+#tabbrowser-tabs[orient="vertical"] #tabbrowser-arrowscrollbox::part(scrollbox) {
+  scrollbar-width: thin !important;
+  scrollbar-color: var(--nx-bar-line) transparent !important;
+}
+
+/* ---------- 9.3 Karty jako poziome „wiersze" ---------- */
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab {
+  margin: var(--nx-v-gap) 0 !important;
+  align-self: stretch !important;
+  width: auto !important;
+  min-width: 0 !important;
+  max-width: none !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tab-background {
+  height: var(--nx-v-tab-h) !important;
+  min-height: var(--nx-v-tab-h) !important;
+  border-radius: var(--nx-v-radius) !important;
+  background: linear-gradient(90deg, var(--nx-tile-top), var(--nx-tile-bottom)) !important;
+  overflow: hidden !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tab-content {
+  height: var(--nx-v-tab-h) !important;
+}
+
+/* Lewy pasek akcentu (zastępuje „podświetlenie od dołu" z kart poziomych) */
+#tabbrowser-tabs[orient="vertical"] .tab-background::before {
+  content: "" !important;
+  position: absolute !important;
+  inset-block: 8px !important;
+  inset-inline-start: 0 !important;
+  width: 3px !important;
+  border-radius: 0 3px 3px 0 !important;
+  background: var(--nx-tile-border) !important;
+  opacity: 0.55 !important;
+  transition: opacity 0.2s ease, inset-block 0.25s ease, background 0.2s ease !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:hover:not([selected]) .tab-background::before {
+  background: var(--nx-tile-hover) !important;
+  opacity: 1 !important;
+  inset-block: 5px !important;
+}
+
+/* Zwinięty panel: sama ikona, wyśrodkowana (dziedziczone z sekcji 4) */
+
+/* Rozwinięty panel: ikona + tytuł + drugi wiersz ze statusem */
+#tabbrowser-tabs[orient="vertical"][expanded] .tabbrowser-tab:not([pinned]) .tab-content {
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  padding-inline: 14px 8px !important;
+}
+
+#tabbrowser-tabs[orient="vertical"][expanded] .tabbrowser-tab:not([pinned]) .tab-label-container {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tab-label {
+  color: var(--nx-text) !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.2px !important;
+  text-shadow: 0 0 6px rgba(var(--nx-neon-glow), 0.35) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] .tab-label {
+  color: #fff !important;
+  text-shadow: 0 0 3px #fff,
+               0 0 10px rgba(var(--nx-neon-glow), 0.9) !important;
+}
+
+/* Drugi wiersz pojawia się tylko, gdy jest co pokazać (dźwięk, wyciszenie, PiP) */
+#tabbrowser-tabs[orient="vertical"][expanded]
+  .tabbrowser-tab:not([pinned]):is([soundplaying], [muted], [pictureinpicture], [activemedia-blocked])
+  .tab-secondary-label {
+  display: block !important;
+  color: var(--nx-neon) !important;
+  font-size: 0.8em !important;
+  text-shadow: 0 0 6px rgba(var(--nx-neon-glow), 0.8) !important;
+}
+
+/* Przycisk zamknięcia: tylko po najechaniu, obraca się przy hoverze */
+#tabbrowser-tabs[orient="vertical"][expanded] .tabbrowser-tab:not([pinned]) .tab-close-button {
+  display: flex !important;
+  width: 22px !important;
+  height: 22px !important;
+  margin-inline-start: auto !important;
+  padding: 4px !important;
+  border-radius: 6px !important;
+  opacity: 0 !important;
+  fill: var(--nx-icon-fill) !important;
+  transition: opacity 0.15s ease, background 0.15s ease,
+              transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"][expanded] .tabbrowser-tab:hover .tab-close-button {
+  opacity: 1 !important;
+}
+
+#tabbrowser-tabs[orient="vertical"][expanded] .tab-close-button:hover {
+  background: rgba(255, 80, 230, 0.32) !important;
+  transform: rotate(90deg) scale(1.1) !important;
+}
+
+/* ---------- 9.4 Stany kart ---------- */
+
+/* Aktywna karta: neonowy pasek z lewej + poziomy gradient */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] .tab-background {
+  background: linear-gradient(90deg, #6b1a95, #2e0848) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[selected] .tab-background::before {
+  inset-block: 4px !important;
+  width: 4px !important;
+  background: linear-gradient(180deg, #ff8af5, #c44dff) !important;
+  opacity: 1 !important;
+  animation: nx-v-bar 2.4s ease-in-out infinite !important;
+}
+
+@keyframes nx-v-bar {
+  0%, 100% { box-shadow: 0 0 8px  rgba(255, 90, 230, 0.7); }
+  50%      { box-shadow: 0 0 16px rgba(255, 90, 230, 1); }
+}
+
+/* Hover: przesunięcie w prawo zamiast uniesienia */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:hover:not([selected]) .tab-background {
+  transform: translateX(4px) !important;
+}
+
+/* Kliknięcie: wciśnięcie */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab:active .tab-background {
+  transform: translateX(2px) scale(0.97) !important;
+}
+
+/* Nowa karta wjeżdża z lewej */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[fadein] {
+  animation: nx-vtab-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both !important;
+}
+
+@keyframes nx-vtab-in {
+  0%   { opacity: 0; transform: translateX(-18px) scale(0.95); }
+  60%  { opacity: 1; transform: translateX(3px) scale(1.02); }
+  100% { opacity: 1; transform: none; }
+}
+
+/* Ładowanie strony: świetlny przebłysk przesuwający się po karcie */
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[busy] .tab-background::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(90deg, transparent, rgba(255, 140, 245, 0.3), transparent) !important;
+  pointer-events: none !important;
+  animation: nx-v-scan 1.1s linear infinite !important;
+}
+
+@keyframes nx-v-scan {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ---------- 9.5 Przypięte karty: siatka kafelków + neonowy separator ---------- */
+
+#tabbrowser-tabs[orient="vertical"] #pinned-tabs-container {
+  gap: var(--nx-tile-gap) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] {
+  width: var(--nx-v-pin) !important;
+  min-width: var(--nx-v-pin) !important;
+  max-width: var(--nx-v-pin) !important;
+  margin: 2px !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-background {
+  height: var(--nx-v-pin) !important;
+  min-height: var(--nx-v-pin) !important;
+  border-radius: 10px !important;
+  border-color: var(--nx-tile-hover) !important;
+  background: linear-gradient(180deg, #5a1580, #240638) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-content {
+  height: var(--nx-v-pin) !important;
+  justify-content: center !important;
+  padding: 0 !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-background::before {
+  display: none !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-label-container,
+#tabbrowser-tabs[orient="vertical"] .tabbrowser-tab[pinned] .tab-close-button {
+  display: none !important;
+}
+
+/* Separator między przypiętymi a resztą kart (tylko gdy są przypięte) */
+#tabbrowser-tabs[orient="vertical"] #pinned-tabs-container:has(.tabbrowser-tab[pinned]) {
+  padding-bottom: 8px !important;
+  margin-bottom: 8px !important;
+  border-bottom: 1px solid transparent !important;
+  border-image: linear-gradient(90deg, transparent, var(--nx-tile-active), transparent) 1 !important;
+  box-shadow: 0 8px 10px -9px rgba(255, 90, 230, 0.9) !important;
+}
+
+/* ---------- 9.6 Przycisk nowej karty (pełna szerokość) ---------- */
+
+#tabbrowser-tabs[orient="vertical"] #tabs-newtab-button {
+  flex: 0 0 auto !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: none !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  max-height: 36px !important;
+  margin: 8px 0 4px !important;
+  border: 1px dashed rgba(190, 110, 255, 0.6) !important;
+  border-radius: var(--nx-v-radius) !important;
+  background: rgba(120, 50, 200, 0.18) !important;
+  color: var(--nx-neon) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"][expanded] #tabs-newtab-button .toolbarbutton-text {
+  display: block !important;
+  margin-inline-start: 8px !important;
+  color: var(--nx-neon) !important;
+  font-weight: 600 !important;
+  text-shadow: 0 0 6px rgba(var(--nx-neon-glow), 0.8) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] #tabs-newtab-button > .toolbarbutton-icon {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+}
+
+/* Hover: bez obrotu całego przycisku – obraca się tylko plus */
+#tabbrowser-tabs[orient="vertical"] #tabs-newtab-button:hover {
+  transform: none !important;
+  border-style: solid !important;
+  border-color: var(--nx-tile-hover) !important;
+  background: rgba(190, 110, 255, 0.3) !important;
+  box-shadow: 0 0 14px rgba(210, 140, 255, 0.7) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] #tabs-newtab-button:hover > .toolbarbutton-icon {
+  transform: rotate(90deg) scale(1.15);
+}
+
+/* ---------- 9.7 Grupy kart (jeśli Twoja wersja Firefoksa je ma) ---------- */
+
+#tabbrowser-tabs[orient="vertical"] tab-group .tab-group-label {
+  color: #fff !important;
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(var(--nx-neon-glow), 0.8) !important;
+}
+
+#tabbrowser-tabs[orient="vertical"] tab-group {
+  filter: drop-shadow(0 0 4px rgba(200, 80, 255, 0.35));
+}
